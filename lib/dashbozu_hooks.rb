@@ -27,7 +27,7 @@ class DashbozuHook < Redmine::Hook::Listener
     issue   = context[:issue]
     journal = context[:journal]
     message = {
-      :id => "#{issue.id}-#{journal.indice}",
+      :id => "#{issue.id}-#{journal.id}",
       :subject => issue.subject,
       :description => journal.notes,
       :project => issue.project.name,
