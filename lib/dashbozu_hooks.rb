@@ -10,7 +10,7 @@ class DashbozuHook < Redmine::Hook::Listener
     request   = context[:request]
     message = {
       :id => issue.id.to_s,
-      :subject => issue.subject,
+      :subject => "(#{l(:dashbozu_notifier_ticket_new)})[#{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}",
       :description => issue.description,
       :project => issue.project.name,
       :url => '',
@@ -26,7 +26,7 @@ class DashbozuHook < Redmine::Hook::Listener
     journal = context[:journal]
     message = {
       :id => "#{issue.id}-#{journal.id}",
-      :subject => issue.subject,
+      :subject => "(#{l(:dashbozu_notifier_ticket_update)})[#{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}",
       :description => journal.notes,
       :project => issue.project.name,
       :url => '',

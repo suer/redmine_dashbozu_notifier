@@ -1,2 +1,4 @@
 en:
   dashbozu_notifier_settings_label_url: "Dashbozu Root URL"
+  dashbozu_notifier_ticket_new: "New"
+  dashbozu_notifier_ticket_update: "Update"
