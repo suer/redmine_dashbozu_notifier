@@ -8,14 +8,12 @@ class DashbozuHook < Redmine::Hook::Listener
     return unless configured?
     issue   = context[:issue]
     request   = context[:request]
-    issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue,
-                        :host => request.host, :protocol => (request.ssl? ? 'https' : 'http'), :port => request.server_port)
     message = {
       :id => issue.id.to_s,
       :subject => issue.subject,
       :description => issue.description,
       :project => issue.project.name,
-      :url => issue_url,
+      :url => '',
       :iconUrl => gravatar_url(issue.author.mail),
       :author => issue.author.name
     }
