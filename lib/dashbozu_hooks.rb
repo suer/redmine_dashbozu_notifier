@@ -56,8 +56,10 @@ class DashbozuHook < Redmine::Hook::Listener
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
-      http.start do |connection|
-        connection.request(req)
+      Thread.start do
+        http.start do |connection|
+          connection.request(req)
+        end
       end
     rescue Net::HTTPBadResponse => e
       Rails.logger.error "#{e}"
