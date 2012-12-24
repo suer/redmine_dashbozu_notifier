@@ -1,5 +1,7 @@
 
 class DashbozuHook < Redmine::Hook::Listener
+  include ApplicationHelper
+  include IssuesHelper
   include GravatarHelper::PublicMethods
   include ERB::Util
   include Rails.application.routes.url_helpers
@@ -24,10 +26,11 @@ class DashbozuHook < Redmine::Hook::Listener
     return unless configured?
     issue   = context[:issue]
     journal = context[:journal]
+
     message = {
       :id => "#{issue.id}-#{journal.id}",
       :subject => "(#{l(:dashbozu_notifier_ticket_update)}) [#{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}",
-      :description => journal.notes,
+      :description => journal_to_text(issue, journal),
       :project => issue.project.name,
       :url => '',
       :iconUrl => gravatar_url(journal.user.mail),
@@ -39,6 +42,18 @@ class DashbozuHook < Redmine::Hook::Listener
   private
   def configured?
     not Setting.plugin_redmine_dashbozu_notifier.nil?
+  end
+
+  def journal_to_text(issue, journal)
+    contents = ''
+    if journal.details.any?
+      contents << '<ul class="details">'
+      details_to_strings(journal.details, true).each do |detail|
+        contents << "<li>#{detail.to_s}</li>"
+      end
+      contents << '</ul>'
+    end
+    contents << textilizable(journal, :notes)
   end
 
   def post(json)
