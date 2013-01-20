@@ -4,6 +4,7 @@ class DashbozuHook < Redmine::Hook::Listener
   include IssuesHelper
   include GravatarHelper::PublicMethods
   include ERB::Util
+  include ActionView::Helpers::UrlHelper
   include Rails.application.routes.url_helpers
 
   def controller_issues_new_after_save(context = {})
@@ -37,6 +38,7 @@ class DashbozuHook < Redmine::Hook::Listener
       :author => journal.user.name
     }
     post(message.to_json)
+    journal
   end
 
   private
@@ -79,5 +81,10 @@ class DashbozuHook < Redmine::Hook::Listener
     rescue Net::HTTPBadResponse => e
       Rails.logger.error "#{e}"
     end
+  end
+
+  # disable Application helper's parse links method
+  def parse_redmine_links(text, project, obj, attr, only_path, options)
+    text
   end
 end
