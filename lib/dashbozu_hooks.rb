@@ -11,12 +11,14 @@ class DashbozuHook < Redmine::Hook::Listener
     return unless configured?
     issue   = context[:issue]
     request   = context[:request]
+    controller = context[:controller]
+
     message = {
       :id => issue.id.to_s,
       :subject => "(#{l(:dashbozu_notifier_ticket_new)}) [#{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}",
       :description => issue.description,
       :project => issue.project.name,
-      :url => '',
+      :url => controller.issue_url(issue),
       :iconUrl => gravatar_url(issue.author.mail),
       :author => issue.author.name
     }
@@ -27,13 +29,14 @@ class DashbozuHook < Redmine::Hook::Listener
     return unless configured?
     issue   = context[:issue]
     journal = context[:journal]
+    controller = context[:controller]
 
     message = {
       :id => "#{issue.id}-#{journal.id}",
       :subject => "(#{l(:dashbozu_notifier_ticket_update)}) [#{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}",
       :description => journal_to_text(issue, journal),
       :project => issue.project.name,
-      :url => '',
+      :url => controller.issue_url(issue),
       :iconUrl => gravatar_url(journal.user.mail),
       :author => journal.user.name
     }
